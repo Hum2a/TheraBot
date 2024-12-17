@@ -5,6 +5,7 @@ import LoginPage from '../components/pages/LoginPage';
 import Dashboard from '../components/pages/Dashboard';
 import ChatPage from '../components/pages/ChatPage';
 import ProfilePage from '../components/pages/ProfilePage';
+import ConversationHistory from '../components/pages/ConversationHistory';
 import Navbar from '../components/ui/Navbar';
 
 const Navigation = () => {
@@ -33,6 +34,7 @@ const Navigation = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/history" element={<ConversationHistory />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </>
         ) : (

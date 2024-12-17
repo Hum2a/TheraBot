@@ -15,6 +15,10 @@ const Dashboard = () => {
           <h3>Chat</h3>
           <p>Start chatting with TheraBot</p>
         </Link>
+        <Link to="/history" className={styles.optionCard}>
+          <h3>Conversation History</h3>
+          <p>Review your past conversations</p>
+        </Link>
       </div>
     </div>
   );

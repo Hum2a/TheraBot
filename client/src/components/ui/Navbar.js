@@ -24,6 +24,7 @@ const Navbar = () => {
         <Link to="/dashboard" className={styles.link}>Dashboard</Link>
         <Link to="/chat" className={styles.link}>Chat</Link>
         <Link to="/profile" className={styles.link}>Profile</Link>
+        <Link to="/history" className={styles.link}>Conversation History</Link>
         <button onClick={handleLogout} className={styles.logoutButton}>Logout</button>
       </div>
     </nav>

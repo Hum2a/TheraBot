@@ -1,0 +1,98 @@
+.container {
+    font-family: 'Poppins', sans-serif;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  h2 {
+    color: #2C3E50;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .conversationList {
+    margin-top: 20px;
+  }
+  
+  .conversationItem {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 10px auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .conversationItem:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .messagesContainer {
+    margin-top: 30px;
+    text-align: left;
+  }
+  
+  .message {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #333;
+  }
+
+  .messagesContainer {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .messageList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .messageContainer {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+  
+  .userMessage, .botMessage {
+    margin: 5px 0;
+    font-size: 1rem;
+  }
+  
+  .userMessage strong {
+    color: #2C3E50;
+  }
+  
+  .botMessage strong {
+    color: #2980B9;
+  }
+  
+  p {
+    margin: 5px 0 0;
+  }
+  
+  .deleteButton {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .deleteButton:hover {
+    background-color: #c0392b;
+  }
+  
