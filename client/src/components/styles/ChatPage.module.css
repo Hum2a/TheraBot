@@ -1,0 +1,22 @@
+.page {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F4F6F7;
+    height: 100vh;
+  }
+  
+  .container {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #2C3E50;
+    font-weight: 600;
+  }
+  

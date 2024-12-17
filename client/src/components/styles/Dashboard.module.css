@@ -1,0 +1,37 @@
+.container {
+    font-family: 'Poppins', sans-serif;
+    max-width: 900px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  
+  h2 {
+    color: #2C3E50;
+    margin-bottom: 20px;
+  }
+  
+  .options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .optionCard {
+    background: #18BC9C;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .optionCard:hover {
+    transform: translateY(-5px);
+    background: #16A085;
+  }
+  
+  .optionCard h3 {
+    margin-bottom: 10px;
+  }
+  

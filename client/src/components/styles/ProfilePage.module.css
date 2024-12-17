@@ -1,0 +1,78 @@
+.container {
+    font-family: 'Poppins', sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  h2 {
+    color: #2C3E50;
+    margin-bottom: 20px;
+  }
+  
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .card {
+    background-color: #f9f9f9;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+  
+  .card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #2C3E50;
+  }
+  
+  .card p {
+    margin: 5px 0 0;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .editButton, .saveButton {
+    margin-top: 20px;
+    background-color: #18BC9C;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .editButton:hover, .saveButton:hover {
+    background-color: #16A085;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  label {
+    text-align: left;
+    font-weight: 600;
+    color: #2C3E50;
+  }
+  
+  .inputField {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
