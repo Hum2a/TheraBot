@@ -1,0 +1,14 @@
+# Node.js
+node_modules/
+.env
+
+# Firebase service account
+therabot-fb6b3-firebase-adminsdk-tymrm-5be11a5729.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React build files
+client/build/
