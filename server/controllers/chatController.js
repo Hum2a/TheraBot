@@ -5,25 +5,31 @@ const admin = require('firebase-admin');
 
 async function handleChat(req, res) {
   const { Body, From } = req.body;
+  const idToken = req.headers.authorization?.split('Bearer ')[1]; // Extract token
   console.log("Webhook payload received:", req.body);
 
   try {
-    const isWebUser = From === 'web-client';
-    const userId = isWebUser ? 'web-user' : From; // User identifier
+    let userId = 'web-user'; // Default for unauthenticated web users
+
+    // Verify the Firebase ID token
+    if (idToken) {
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      userId = decodedToken.uid; // Firebase UID of the authenticated user
+    } else if (From !== 'web-client') {
+      userId = From; // Use the "From" field for WhatsApp users
+    }
+
     const userRef = db.collection('users').doc(userId);
 
     // Check if the user exists in Firestore
     const userDoc = await userRef.get();
-    if (!userDoc.exists && !isWebUser) {
-      res.status(400).send('User not authenticated.');
-      return;
+    if (!userDoc.exists) {
+      await userRef.set({ createdAt: new Date() }); // Create user if not exists
     }
 
     // Generate session ID based on the current date-time
     const sessionId = new Date().toISOString();
-    const conversationRef = userRef
-      .collection('conversations')
-      .doc(sessionId);
+    const conversationRef = userRef.collection('conversations').doc(sessionId);
 
     // Initialize session if it doesn't exist
     const sessionDoc = await conversationRef.get();
@@ -53,20 +59,19 @@ async function handleChat(req, res) {
         timestamp: new Date(),
       }),
     });
-
-    // Send the reply only to WhatsApp users
-    if (!isWebUser) {
-      await client.messages.create({
-        from: process.env.TWILIO_WHATSAPP_NUMBER,
-        to: From,
-        body: botReply,
-      });
-    }
+        // Send the reply only to WhatsApp users
+        if (!isWebUser) {
+            await client.messages.create({
+              from: process.env.TWILIO_WHATSAPP_NUMBER,
+              to: From,
+              body: botReply,
+            });
+          }
 
     res.status(200).json({ reply: botReply }); // Send response back to the web client
   } catch (error) {
     console.error('Error handling chat:', error);
-    res.status(500).json({ reply: 'Error processing your message.' });
+    res.status(401).json({ reply: 'User not authenticated or error occurred.' });
   }
 }
 
