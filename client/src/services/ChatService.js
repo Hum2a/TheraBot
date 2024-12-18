@@ -2,7 +2,8 @@ import axios from 'axios';
 import { getAuth } from 'firebase/auth';
 
 // const API_URL = 'https://ea05-82-38-34-108.ngrok-free.app';
-const API_URL = process.env('API_URL');
+const API_URL = process.env.API_URL;
+
 
 
 export const initializeSession = async () => {
