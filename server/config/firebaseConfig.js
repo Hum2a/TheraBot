@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('/etc/secrets/therabot-firebase-key.json'); // Update path to Render's secrets directory
+const serviceAccount = require('/etc/secrets/therabot-fb6b3-firebase-adminsdk-tymrm-5be11a5729.json'); // Update path to Render's secrets directory
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
