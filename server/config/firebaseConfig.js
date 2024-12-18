@@ -6,5 +6,6 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+db.settings({ ignoreUndefinedProperties: true }); // Add this line
 
 module.exports = { db };

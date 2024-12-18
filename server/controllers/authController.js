@@ -42,21 +42,54 @@ async function googleAuthCallback(req, res) {
     const userInfo = await oauth2.userinfo.get();
     const googleEmail = userInfo.data.email;
 
-    // Register user in Firebase Authentication
+    // Clean and format the phone number
     const formattedPhoneNumber = formatPhoneNumber(userPhoneNumber);
-    const { customToken } = await registerNewUser(googleEmail);
 
-    // Save the custom token to Firestore for client sign-in
-    await db.collection('users').doc(userPhoneNumber).set({
+    // Check if the user already exists in Firebase Authentication
+    let userRecord;
+    try {
+      userRecord = await admin.auth().getUserByEmail(googleEmail);
+      console.log('User already exists, signing in:', userRecord.uid);
+    } catch (error) {
+      if (error.code === 'auth/user-not-found') {
+        // User does not exist, create a new user
+        console.log('User not found, creating a new user...');
+        userRecord = await admin.auth().createUser({
+          email: googleEmail,
+          phoneNumber: formattedPhoneNumber,
+          emailVerified: true,
+        });
+        console.log('User created successfully:', userRecord.uid);
+      } else {
+        throw error; // Re-throw unexpected errors
+      }
+    }
+
+    const userUID = userRecord.uid;
+
+    // Save the WhatsApp number in `registered_numbers`
+    await db.collection('registered_numbers').doc(formattedPhoneNumber).set({
+      uid: userUID,
       phoneNumber: formattedPhoneNumber,
-      googleEmail: googleEmail,
-      isAuthenticated: true,
-      authMethod: 'google',
-      customToken: customToken, // Store the token for client usage
-    });   
+    });
+
+    // Save user data in `users/{uid}`
+    await db.collection('users').doc(userUID).set(
+      {
+        eail: googleEmail,
+        phoneNumber: formattedPhoneNumber,
+        isAuthenticated: true,
+        authMethod: 'google',
+      },
+      { merge: true } // Merge to prevent overwriting existing data
+    );
+
+    // Generate a custom token for client sign-in
+    const { customToken } = await registerNewUser(googleEmail);
 
     res.json({
       message: 'Authentication successful! You can now continue chatting with TheraBot.',
+      customToken: customToken,
     });
   } catch (error) {
     console.error('Error during Google OAuth:', error);

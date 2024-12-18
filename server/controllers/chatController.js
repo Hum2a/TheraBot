@@ -2,6 +2,7 @@ const { openai } = require('../config/openaiConfig');
 const { db } = require('../config/firebaseConfig');
 const { client } = require('../config/twilioConfig');
 const admin = require('firebase-admin');
+const { generateGoogleAuthLink } = require('./authController');
 
 /**
  * Initialize a new conversation session.
@@ -40,77 +41,190 @@ async function initializeSession(req, res) {
 /**
  * Handle incoming chat messages.
  * Saves messages in the session initialized earlier.
+ * 
  */
 async function handleChat(req, res) {
-  const { Body, From, sessionId } = req.body;
-  const idToken = req.headers.authorization?.split('Bearer ')[1];
-  console.log("Webhook payload received:", req.body);
-
-  try {
-    let userId = 'web-user'; // Default to 'web-user' for unauthenticated users
-
-    // Verify Firebase ID token if present
-    if (idToken) {
-      const decodedToken = await admin.auth().verifyIdToken(idToken);
-      userId = decodedToken.uid;
-    } else if (From !== 'web-client') {
-      userId = From; // Use From field for WhatsApp users
-    }
-
-    if (!sessionId) {
-      throw new Error('No sessionId provided.');
-    }
-
-    // Reference to the user's session document
-    const conversationRef = db
-      .collection('users')
-      .doc(userId)
-      .collection('conversations')
-      .doc(sessionId);
-
-    const sessionDoc = await conversationRef.get();
-    if (!sessionDoc.exists) {
-      res.status(400).json({ error: 'Session does not exist.' });
-      return;
-    }
-
-    // Generate a response using OpenAI
-    const openAIResponse = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        { 
-          role: 'system', 
-          content: `You are a supportive and empathetic mental health assistant named TheraBot.
-                    \nYou must act as a therapist to the user by looking past their question
-                    \nand finding the root of their anxieties and problems.
-                    \nUse all the resources on the internet to your advantage.` 
-        },
-        { 
-          role: 'user', 
-          content: Body 
-        },
-      ],
+    const { Body, From, sessionId } = req.body;
+    const idToken = req.headers.authorization?.split('Bearer ')[1];
+  
+    try {
+        let userId
+    
+        if (From === 'web-client') {
+          if (!idToken) {
+            throw new Error('No token provided for web-client.');
+          }
+    
+          // Verify the ID token to get the user's UID
+          const decodedToken = await admin.auth().verifyIdToken(idToken);
+          userId = decodedToken.uid;
+          console.log(`Resolved userId for web-client: ${userId}`);
+        } else if (From.startsWith('whatsapp:')) {
+          const cleanNumber = From.replace('whatsapp:', '');
+          // Check if the number is registered
+          const registeredNumberRef = db.collection('registered_numbers').doc(cleanNumber);
+          const registeredNumberDoc = await registeredNumberRef.get();
       
-    });
+          if (!registeredNumberDoc.exists) {
+              // If the number is not registered, prompt for Google login
+              const googleAuthLink = generateGoogleAuthLink(cleanNumber);
+              const loginMessage = `Welcome to TheraBot! To continue, please log in using Google: ${googleAuthLink}`;
+      
+              await client.messages.create({
+              from: process.env.TWILIO_WHATSAPP_NUMBER,
+              to: From,
+              body: loginMessage,
+              });
+      
+              res.status(200).send('Login link sent.');
+              return;
+          }
+      
+          // Retrieve the UID from the registered number
+          const { uid } = registeredNumberDoc.data();
+          userId = uid; // Use the UID for further operations
+        } else {
+          throw new Error('Invalid "From" field.');
+        }
 
-    const botReply = openAIResponse.choices[0].message.content;
+        // Fetch user preferences
+        console.log(`Fetching preferences for userId: ${userId}`);
+        const preferencesRef = db.collection('users').doc(userId).collection('settings').doc('preferences');
+        const preferencesDoc = await preferencesRef.get();
 
-    // Append the new message to the session document in Firestore
-    await conversationRef.update({
-      messages: admin.firestore.FieldValue.arrayUnion({
-        userMessage: Body,
-        botMessage: botReply,
-        timestamp: new Date(),
-      }),
-    });
+        let tone = 'empathetic';
+        let nickname = 'User';
+        let role = 'therapist';
 
-    res.status(200).json({ reply: botReply }); // Return the bot's reply
-  } catch (error) {
-    console.error('Error handling chat:', error);
-    res.status(500).json({ error: 'Error processing message.' });
+        if (preferencesDoc.exists) {
+          const preferences = preferencesDoc.data();
+          const personalization = preferences.personalization || {};
+
+          // Destructure with fallback defaults
+          tone = personalization.tone || tone;
+          nickname = personalization.nickname || nickname;
+          role = personalization.role || role;
+
+          console.log(`Fetched preferences:\n Tone: ${tone}\n Role: ${role}\n Nickname: ${nickname}`);
+        } else {
+          console.log('Preferences document does not exist. Using default values.');
+        }
+
+    
+        // Check for sessionId or generate one if missing
+        let activeSessionId = sessionId;
+        if (!activeSessionId) {
+            activeSessionId = new Date().toISOString();
+            console.log(`Generated sessionId: ${activeSessionId}`);
+        }
+    
+        // Reference to the user's session document
+        const conversationRef = db
+            .collection('users')
+            .doc(userId)
+            .collection('conversations')
+            .doc(activeSessionId);
+
+        const botSettings = {
+          tone: tone || 'empathetic',
+          nickname: nickname || 'User',
+          role: role || 'therapist',
+        };
+    
+        // Check if session exists, initialize if it doesn't
+        const sessionDoc = await conversationRef.get();
+        if (!sessionDoc.exists) {
+            await conversationRef.set({
+            startedAt: new Date(),
+            messages: [],
+            botSettings,
+            });
+        }
+        // Command Handling
+        const lowerBody = Body.trim().toLowerCase();
+        if (lowerBody === "end conversation") {
+        await conversationRef.update({
+            endedAt: new Date(),
+        });
+
+        const endMessage = "Your conversation has been ended. You can start a new one anytime by sending a message.";
+        await client.messages.create({
+            from: process.env.TWILIO_WHATSAPP_NUMBER,
+            to: From,
+            body: endMessage,
+        });
+
+        res.status(200).json({ reply: endMessage });
+        return;
+        } else if (lowerBody === "menu") {
+        const menuMessage = "TheraBot Commands:\n- Type 'end conversation' to end the current session.\n- Type 'menu' to view this message again.";
+        await client.messages.create({
+            from: process.env.TWILIO_WHATSAPP_NUMBER,
+            to: From,
+            body: menuMessage,
+        });
+
+        res.status(200).json({ reply: menuMessage });
+        return;
+        }
+
+    
+        // Generate a response using OpenAI
+        const systemPrompt = `You are a ${tone || 'supportive'} assistant named TheraBot, acting as a ${role || 'therapist'}.
+        Address the user as "${nickname || 'User'}" and maintain a ${tone || 'empathetic'} tone throughout the conversation.`;
+      
+        // Generate a response using OpenAI
+        const openAIResponse = await openai.chat.completions.create({
+            model: 'gpt-4o',
+            messages: [
+            {
+                role: 'system',
+                content: systemPrompt,
+            },
+            {
+                role: 'user',
+                content: Body,
+            },
+            ],
+        });
+    
+        const botReply = openAIResponse.choices[0].message.content;
+    
+        // Append the new message to the session document in Firestore
+        await conversationRef.update({
+            messages: admin.firestore.FieldValue.arrayUnion({
+            userMessage: Body,
+            botMessage: botReply,
+            timestamp: new Date(),
+            }),
+        });
+    
+        // Send the bot's reply via WhatsApp
+        if (From.startsWith('whatsapp:')) {
+            await client.messages.create({
+            from: process.env.TWILIO_WHATSAPP_NUMBER,
+            to: From,
+            body: botReply,
+            });
+        }
+    
+        res.status(200).json({ reply: botReply }); // Return the bot's reply
+    } catch (error) {
+      console.error('Error handling chat:', error);
+  
+      // Send an error message via WhatsApp if applicable
+      if (From.startsWith('whatsapp:')) {
+        await client.messages.create({
+          from: process.env.TWILIO_WHATSAPP_NUMBER,
+          to: From,
+          body: "Sorry, we encountered an error while processing your message. Please try again later.",
+        });
+      }
+  
+      res.status(500).json({ error: 'Error processing message.' });
+    }
   }
-}
-
+  
 async function fetchHistory(req, res) {
     try {
       const idToken = req.headers.authorization?.split('Bearer ')[1];

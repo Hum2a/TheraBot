@@ -19,7 +19,6 @@ const LoginPage = () => {
         uid: user.uid,
         name: user.displayName || '',
         email: user.email,
-        number: "N/A",
       };
       await setDoc(userRef, profileData, { merge: true });
       console.log('User profile saved:', profileData);

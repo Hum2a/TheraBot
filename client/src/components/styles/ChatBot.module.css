@@ -72,6 +72,7 @@
   }
   
   .sendButton {
+    width: auto;
     margin-left: 10px;
     background-color: #18BC9C;
     color: white;

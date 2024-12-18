@@ -19,6 +19,10 @@ const Dashboard = () => {
           <h3>Conversation History</h3>
           <p>Review your past conversations</p>
         </Link>
+        <Link to="/settings" className={styles.optionCard}>
+          <h3>Settings</h3>
+          <p>Design your preferences</p>  
+        </Link>
       </div>
     </div>
   );
