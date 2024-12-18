@@ -157,7 +157,7 @@ async function handleChat(req, res) {
         res.status(200).json({ reply: endMessage });
         return;
         } else if (lowerBody === "menu") {
-        const menuMessage = "TheraBot Commands:\n- Type 'end conversation' to end the current session.\n- Type 'menu' to view this message again.";
+        const menuMessage = "TheraBot Commands:\n- Type 'end conversation' to end the current session.\n- Type 'menu' to view this message again.\n- Type 'profile' to view Profile.\n- Type 'settings' to view Settings.";
         await client.messages.create({
             from: process.env.TWILIO_WHATSAPP_NUMBER,
             to: From,
@@ -166,6 +166,54 @@ async function handleChat(req, res) {
 
         res.status(200).json({ reply: menuMessage });
         return;
+        }
+        else if (lowerBody === "profile") {
+          const userRef = db.collection('users').doc(userId);
+          const userDoc = await userRef.get();
+
+          if (userDoc.exists) {
+              const userData = userDoc.data();
+              const profileMessage = `Your Profile:\n- Name: ${userData.name || 'N/A'}\n- Email: ${userData.email || 'N/A'}\n- Phone: ${userData.phoneNumber || 'N/A'}`;
+              await client.messages.create({
+                  from: process.env.TWILIO_WHATSAPP_NUMBER,
+                  to: From,
+                  body: profileMessage,
+              });
+              res.status(200).json({ reply: profileMessage });
+          } else {
+              const errorMessage = 'Profile not found.';
+              await client.messages.create({
+                  from: process.env.TWILIO_WHATSAPP_NUMBER,
+                  to: From,
+                  body: errorMessage,
+              });
+              res.status(404).json({ reply: errorMessage });
+          }
+          return;
+        } else if (lowerBody === "settings") {
+            const settingsRef = db.collection('users').doc(userId).collection('settings').doc('preferences');
+            const settingsDoc = await settingsRef.get();
+
+            if (settingsDoc.exists) {
+                const settingsData = settingsDoc.data();
+                const settingsPersonalization = settingsData.personalization || {};
+                const settingsMessage = `Your Settings:\n- Tone: ${settingsPersonalization.tone || 'Default'}\n- Role: ${settingsPersonalization.role || 'Default'}\n- Nickname: ${settingsPersonalization.nickname || 'Default'}`;
+                await client.messages.create({
+                    from: process.env.TWILIO_WHATSAPP_NUMBER,
+                    to: From,
+                    body: settingsMessage,
+                });
+                res.status(200).json({ reply: settingsMessage });
+            } else {
+                const errorMessage = 'Settings not found.';
+                await client.messages.create({
+                    from: process.env.TWILIO_WHATSAPP_NUMBER,
+                    to: From,
+                    body: errorMessage,
+                });
+                res.status(404).json({ reply: errorMessage });
+            }
+            return;
         }
 
     
