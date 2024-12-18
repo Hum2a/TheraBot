@@ -215,8 +215,17 @@ async function handleChat(req, res) {
             }
             return;
         }
+        else if (lowerBody === "website") {
+          const websiteMessage = "Visit the TheraBot website at: https://therabot-site.onrender.com";
+          await client.messages.create({
+              from: process.env.TWILIO_WHATSAPP_NUMBER,
+              to: From,
+              body: websiteMessage,
+          });
 
-    
+          res.status(200).json({ reply: websiteMessage });
+          return;
+      }    
         // Generate a response using OpenAI
         const systemPrompt = `You are a ${tone || 'supportive'} assistant named TheraBot, acting as a ${role || 'therapist'}.
         Address the user as "${nickname || 'User'}" and maintain a ${tone || 'empathetic'} tone throughout the conversation.`;
