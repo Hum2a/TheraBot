@@ -17,8 +17,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
 // Routes
 app.use('/auth', authRoutes);
 app.use('/otp', otpRoutes);
