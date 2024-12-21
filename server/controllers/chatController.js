@@ -157,7 +157,7 @@ async function handleChat(req, res) {
         res.status(200).json({ reply: endMessage });
         return;
         } else if (lowerBody === "menu") {
-        const menuMessage = "TheraBot Commands:\n- Type 'end conversation' to end the current session.\n- Type 'menu' to view this message again.\n- Type 'profile' to view Profile.\n- Type 'settings' to view Settings.";
+        const menuMessage = "TheraBot Commands:\n- Type 'website' to recieve a link to the website. \n- Type 'end conversation' to end the current session.\n- Type 'menu' to view this message again.\n- Type 'profile' to view Profile.\n- Type 'settings' to view Settings.";
         await client.messages.create({
             from: process.env.TWILIO_WHATSAPP_NUMBER,
             to: From,
