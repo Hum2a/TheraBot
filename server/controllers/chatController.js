@@ -68,7 +68,8 @@ async function handleChat(req, res) {
           if (!registeredNumberDoc.exists) {
               // If the number is not registered, prompt for Google login
               const googleAuthLink = generateGoogleAuthLink(cleanNumber);
-              const loginMessage = `Welcome to TheraBot! To continue, please log in using Google: ${googleAuthLink}`;
+              const menuMessage = "TheraBot Commands:\n- Type 'website' to recieve a link to the website. \n- Type 'end conversation' to end the current session.\n- Type 'menu' to view this message again.\n- Type 'profile' to view Profile.\n- Type 'settings' to view Settings.";
+              const loginMessage = `Welcome to TheraBot! To continue, please log in using Google: ${googleAuthLink} \n ${menuMessage}`;
       
               await client.messages.create({
               from: process.env.TWILIO_WHATSAPP_NUMBER,
