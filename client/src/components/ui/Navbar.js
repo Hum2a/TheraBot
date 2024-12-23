@@ -16,9 +16,14 @@ const Navbar = () => {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.logo}>
+      <div className={styles.logoContainer}>
         <FiMessageSquare size={24} />
-        <span>TheraBot</span>
+        <span className={styles.brandName}>TheraBot</span>
+        <img
+          src="/therabot.png"
+          className={styles.logo}
+          alt="TheraBot Logo"
+        />
       </div>
       <div className={styles.links}>
         <Link to="/dashboard" className={styles.link}>Dashboard</Link>

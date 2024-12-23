@@ -7,29 +7,56 @@
     color: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Poppins', sans-serif;
-  }
-  
-  .logo {
+}
+
+.logoContainer {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+}
+
+.logo {
+    width: 50px; /* Adjust as needed */
+    height: auto; /* Maintain aspect ratio */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    border-radius: 8px; /* Optional: Rounded corners */
+}
+
+.brandName {
+    font-size: 1.5rem;
     font-weight: 600;
-    font-size: 1.2rem;
-  }
-  
-  .links {
+    color: #18BC9C;
+}
+
+.links {
     display: flex;
     gap: 15px;
-  }
-  
-  .link {
+}
+
+.link {
     color: white;
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.3s ease;
-  }
-  
-  .link:hover {
+}
+
+.link:hover {
     color: #18BC9C;
-  }
-  
+}
+
+.logoutButton {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logoutButton:hover {
+    background-color: #18BC9C;
+    color: white;
+    border-color: #18BC9C;
+}
