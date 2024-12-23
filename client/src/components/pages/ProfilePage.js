@@ -7,7 +7,7 @@ import styles from '../styles/ProfilePage.module.css';
 const ProfilePage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [number, setNumber] = useState('');
+  const [phoneNumber, setNumber] = useState('');
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
@@ -19,14 +19,14 @@ const ProfilePage = () => {
     if (!user) return;
 
     try {
-      const userRef = doc(db, `users/${user.uid}/profile`);
+      const userRef = doc(db, `users/${user.uid}`);
       const docSnap = await getDoc(userRef);
 
       if (docSnap.exists()) {
         const profileData = docSnap.data();
         setName(profileData.name || '');
         setEmail(profileData.email || '');
-        setNumber(profileData.number || '');
+        setNumber(profileData.phoneNumber || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -44,8 +44,8 @@ const ProfilePage = () => {
     if (!user) return;
 
     try {
-      const userRef = doc(db, `users/${user.uid}/profile`);
-      await setDoc(userRef, { name, email, number }, { merge: true });
+      const userRef = doc(db, `users/${user.uid}`);
+      await setDoc(userRef, { name, email, phoneNumber }, { merge: true });
       alert('Profile updated successfully!');
       setIsEditing(false);
     } catch (error) {
@@ -71,7 +71,7 @@ const ProfilePage = () => {
           </div>
           <div className={styles.card}>
             <h3>Number</h3>
-            <p>{number}</p>
+            <p>{phoneNumber}</p>
           </div>
           <button onClick={() => setIsEditing(true)} className={styles.editButton}>
             Edit
@@ -96,7 +96,7 @@ const ProfilePage = () => {
           <label>Number:</label>
           <input
             type="text"
-            value={number}
+            value={phoneNumber}
             onChange={(e) => setNumber(e.target.value)}
             className={styles.inputField}
           />

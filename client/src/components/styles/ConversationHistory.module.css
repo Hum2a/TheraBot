@@ -1,98 +1,159 @@
 .container {
-    font-family: 'Poppins', sans-serif;
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  h2 {
-    color: #2C3E50;
-    margin-bottom: 20px;
-  }
-  
-  p {
-    font-size: 1rem;
-    color: #555;
-  }
-  
-  .conversationList {
-    margin-top: 20px;
-  }
-  
-  .conversationItem {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin: 10px auto;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .conversationItem:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .messagesContainer {
-    margin-top: 30px;
-    text-align: left;
-  }
-  
-  .message {
-    margin: 5px 0;
-    font-size: 0.9rem;
-    color: #333;
-  }
+  font-family: 'Poppins', sans-serif;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
 
-  .messagesContainer {
-    margin-top: 20px;
-    text-align: left;
+h2 {
+  color: #2C3E50;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.dayGroup {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease, margin-bottom 0.3s ease;
+}
+
+.dateHeader {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2C3E50;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.conversationsContainer {
+  padding: 10px;
+  animation: slideDown 0.3s ease;
+  display: none; /* Default to hidden */
+}
+
+.conversationsContainer.show {
+  display: block; /* Display when expanded */
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+      opacity: 0;
+      transform: translateY(-10px);
   }
-  
-  .messageList {
-    list-style-type: none;
-    padding: 0;
+  to {
+      opacity: 1;
+      transform: translateY(0);
   }
-  
-  .messageContainer {
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+}
+
+.conversationList {
+  margin-top: 20px;
+}
+
+.conversationItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  margin: 5px 0;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.conversationItem h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.conversationItem:hover {
+  background-color: #f1f1f1;
+}
+
+.messagesContainer {
+  margin-top: 30px;
+  text-align: left;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
   }
-  
-  .userMessage, .botMessage {
-    margin: 5px 0;
-    font-size: 1rem;
+  to {
+      opacity: 1;
   }
-  
-  .userMessage strong {
-    color: #2C3E50;
-  }
-  
-  .botMessage strong {
-    color: #2980B9;
-  }
-  
-  p {
-    margin: 5px 0 0;
-  }
-  
-  .deleteButton {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-  }
-  
-  .deleteButton:hover {
-    background-color: #c0392b;
-  }
-  
+}
+
+.message {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.messagesContainer {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.messageList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.messageContainer {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.userMessage, .botMessage {
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+.userMessage strong {
+  color: #2C3E50;
+}
+
+.botMessage strong {
+  color: #2980B9;
+}
+
+p {
+  margin: 5px 0 0;
+}
+
+.deleteButton {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #c0392b;
+}

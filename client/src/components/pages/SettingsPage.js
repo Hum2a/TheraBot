@@ -150,6 +150,7 @@ const SettingsPage = () => {
             <option value="cat">Cat</option>
             <option value="mortal enemy">Mortal Enemy</option>
             <option value="ex">Ex</option>
+            <option value="god">God</option>
           </select>
         </label>
 
