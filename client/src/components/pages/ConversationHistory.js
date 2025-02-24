@@ -100,11 +100,11 @@ const ConversationHistory = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Conversation History</h2>
       {loading ? (
         <p>Loading conversations...</p>
       ) : (
         <div className={styles.conversationList}>
+          <h2>Conversation History</h2>
           {Object.keys(groupedConversations).length === 0 ? (
             <p>No previous conversations found.</p>
           ) : (

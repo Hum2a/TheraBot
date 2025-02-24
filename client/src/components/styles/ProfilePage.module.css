@@ -1,78 +1,208 @@
 .container {
-    font-family: 'Poppins', sans-serif;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  font-family: 'Poppins', sans-serif;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(107, 70, 193, 0.1);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6B46C1, #805AD5, #6B46C1);
+  background-size: 200% 100%;
+  animation: gradientFlow 3s linear infinite;
+}
+
+h2 {
+  color: #2C3E50;
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  background: linear-gradient(120deg, #6B46C1, #805AD5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: slideDown 0.5s ease-out;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  animation: slideUp 0.5s ease-out;
+}
+
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(107, 70, 193, 0.1);
+  text-align: left;
+  transition: all 0.3s ease;
+  border: 2px solid #F7FAFC;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(107, 70, 193, 0.05),
+    rgba(128, 90, 213, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: #E9D8FD;
+  box-shadow: 0 8px 20px rgba(107, 70, 193, 0.15);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #4A5568;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  margin: 5px 0 0;
+  font-size: 1rem;
+  color: #718096;
+}
+
+.editButton, .saveButton {
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #6B46C1 0%, #805AD5 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.editButton::after, .saveButton::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0)
+  );
+  transform: rotate(45deg);
+  transition: 0.5s;
+  opacity: 0;
+}
+
+.editButton:hover::after, .saveButton:hover::after {
+  opacity: 1;
+  transform: rotate(45deg) translateY(100%);
+}
+
+.editButton:hover, .saveButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(107, 70, 193, 0.2);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+label {
+  text-align: left;
+  font-weight: 600;
+  color: #4A5568;
+  font-size: 0.95rem;
+}
+
+.inputField {
+  padding: 1rem 1.5rem;
+  border: 2px solid rgba(107, 70, 193, 0.2);
+  border-radius: 15px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.inputField:focus {
+  border-color: #6B46C1;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(107, 70, 193, 0.1);
+  outline: none;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 20px auto;
+    padding: 1.5rem;
   }
-  
+
   h2 {
-    color: #2C3E50;
-    margin-bottom: 20px;
+    font-size: 1.8rem;
   }
-  
-  .cards {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
+
   .card {
-    background-color: #f9f9f9;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: left;
+    padding: 1.2rem;
   }
-  
-  .card h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #2C3E50;
-  }
-  
-  .card p {
-    margin: 5px 0 0;
-    font-size: 1rem;
-    color: #555;
-  }
-  
+
   .editButton, .saveButton {
-    margin-top: 20px;
-    background-color: #18BC9C;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    padding: 0.8rem 1.5rem;
   }
-  
-  .editButton:hover, .saveButton:hover {
-    background-color: #16A085;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  label {
-    text-align: left;
-    font-weight: 600;
-    color: #2C3E50;
-  }
-  
-  .inputField {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
+}
   

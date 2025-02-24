@@ -2,61 +2,119 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    background-color: #2C3E50;
-    color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 16px 32px;
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
+    color: #2D3748;
+    box-shadow: 0 4px 20px rgba(107, 70, 193, 0.08);
     font-family: 'Poppins', sans-serif;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(107, 70, 193, 0.1);
 }
 
 .logoContainer {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
 .logo {
-    width: 50px; /* Adjust as needed */
-    height: auto; /* Maintain aspect ratio */
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    border-radius: 8px; /* Optional: Rounded corners */
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(107, 70, 193, 0.15);
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
 
 .brandName {
     font-size: 1.5rem;
-    font-weight: 600;
-    color: #18BC9C;
+    font-weight: 700;
+    background: linear-gradient(120deg, #6B46C1, #805AD5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
 }
 
 .links {
     display: flex;
-    gap: 15px;
+    align-items: center;
+    gap: 24px;
 }
 
 .link {
-    color: white;
+    color: #4A5568;
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #6B46C1, #805AD5);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
 }
 
 .link:hover {
-    color: #18BC9C;
+    color: #6B46C1;
+    background: rgba(107, 70, 193, 0.05);
+}
+
+.link:hover::after {
+    width: 80%;
 }
 
 .logoutButton {
-    background-color: transparent;
+    background: linear-gradient(90deg, #6B46C1, #805AD5);
     color: white;
-    border: 1px solid white;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(107, 70, 193, 0.2);
 }
 
 .logoutButton:hover {
-    background-color: #18BC9C;
-    color: white;
-    border-color: #18BC9C;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(107, 70, 193, 0.3);
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .link {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+
+    .brandName {
+        font-size: 1.3rem;
+    }
 }
