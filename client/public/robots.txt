@@ -1,3 +1,13 @@
 # https://www.robotstxt.org/robotstxt.html
+# Allow all web crawlers
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap location
+Sitemap: https://therabot.yourdomain.com/sitemap.xml
+
+# Disallow some private areas
+Disallow: /login
+Disallow: /signup
+Disallow: /settings
+Disallow: /profile

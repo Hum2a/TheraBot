@@ -1,0 +1,6 @@
+Contact: mailto:security@therabot.onrender.com
+Expires: 2025-01-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://therabot.onrender.com/.well-known/security.txt
+Policy: https://therabot.onrender.com/security-policy
+Hiring: https://therabot.onrender.com/careers 
