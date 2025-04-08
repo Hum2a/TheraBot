@@ -28,6 +28,7 @@
 <td width="50%">
 
 ### Core Capabilities
+
 - 🤖 Advanced NLP for emotional understanding
 - 🌍 Real-time translation (20+ languages)
 - 🔒 End-to-end encryption
@@ -41,6 +42,7 @@
 <td width="50%">
 
 ### Technical Stack
+
 - ⚛️ React 18 with Server Components
 - 📡 WebSocket real-time communication
 - 🔑 JWT authentication & RBAC
@@ -58,42 +60,48 @@
 
 ### Prerequisites
 
-\`\`\`bash
+```bash
 node >= 18.0.0
 npm >= 9.0.0
 docker >= 24.0.0
-\`\`\`
+```
 
 ### Installation
 
 1. **Clone & Install**
-\`\`\`bash
+```bash
 git clone https://github.com/yourusername/TheraBot.git
 cd TheraBot
 npm install
-\`\`\`
+```
 
 2. **Environment Setup**
-\`\`\`bash
+```bash
 cp .env.example .env.local
+
 # Configure your environment variables
-\`\`\`
+
+```
 
 3. **Development**
-\`\`\`bash
+```bash
 npm run dev
+
 # Visit http://localhost:3000
-\`\`\`
+
+```
 
 4. **Docker Deployment**
-\`\`\`bash
+```bash
 docker compose up -d
+
 # Available at http://localhost:3000
-\`\`\`
+
+```
 
 ## 🏗️ Architecture
 
-\`\`\`mermaid
+```mermaid
 graph TD
     A[Client] -->|WebSocket| B[API Gateway]
     B -->|gRPC| C[Auth Service]
@@ -103,7 +111,7 @@ graph TD
     D -->|Document| G[MongoDB]
     C -->|Cache| F
     C -->|Document| G
-\`\`\`
+```
 
 ## 🛠️ Tech Stack
 
@@ -116,6 +124,7 @@ graph TD
 - **Styling**: Tailwind CSS + Framer Motion
 - **Testing**: Jest + React Testing Library
 - **Build Tool**: Turborepo
+
 </details>
 
 <details>
@@ -127,6 +136,7 @@ graph TD
 - **Cache**: Redis (distributed)
 - **Search**: Elasticsearch
 - **Message Queue**: RabbitMQ
+
 </details>
 
 <details>
@@ -138,6 +148,7 @@ graph TD
 - **Logging**: ELK Stack
 - **Cloud**: AWS (multi-region)
 - **CDN**: Cloudflare
+
 </details>
 
 ## 📊 Performance Metrics
@@ -163,30 +174,35 @@ graph TD
 
 ## 🧪 Testing
 
-\`\`\`bash
+```bash
+
 # Unit Tests
+
 npm run test
 
 # Integration Tests
+
 npm run test:integration
 
 # E2E Tests
+
 npm run test:e2e
 
 # Load Tests
+
 npm run test:load
-\`\`\`
+```
 
 ## 📈 API Performance
 
-\`\`\`typescript
+```typescript
 interface APIMetrics {
   responseTime: '<100ms';
   throughput: '10k req/s';
   errorRate: '<0.01%';
   availability: '99.99%';
 }
-\`\`\`
+```
 
 ## 🌐 Deployment
 
@@ -215,7 +231,7 @@ spec:
 
 ## 🔄 CI/CD Pipeline
 
-\`\`\`mermaid
+```mermaid
 graph LR
     A[Push] -->|Trigger| B[Build]
     B --> C[Test]
@@ -223,7 +239,7 @@ graph LR
     D --> E[Security Scan]
     E --> F[Deploy Staging]
     F -->|Manual Approval| G[Deploy Production]
-\`\`\`
+```
 
 ## 📚 Documentation
 
@@ -243,6 +259,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 <td>
 
 ### Good First Issues
+
 - 🐛 Bug fixes
 - 📝 Documentation
 - 🎨 UI/UX improvements
@@ -252,6 +269,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 <td>
 
 ### Major Contributions
+
 - 🏗️ Architecture changes
 - 🚀 Performance improvements
 - 🔒 Security enhancements
@@ -273,4 +291,4 @@ TheraBot is licensed under the [MIT License](LICENSE).
 
 Made with ❤️ by the TheraBot Team
 
-</div> 
+</div>
