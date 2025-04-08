@@ -1,0 +1,82 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+.nyc_output
+
+# Production
+/build
+/dist
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IDE - IntelliJ
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# Misc
+.DS_Store
+*.pem
+.cache
+.temp
+.tmp
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Local Netlify folder
+.netlify
+
+# Vercel
+.vercel
+
+# Next.js
+.next/
+out/
+
+# PWA files
+public/sw.js
+public/workbox-*.js
+
+# Local development SSL certificates
+*.key
+*.crt
+*.pem 

@@ -1,44 +1,30 @@
-# TheraBot
+# TheraBot 🤖💭
 
-TheraBot is a therapeutic chatbot application built with React and Node.js that provides users with mental health support through AI-powered conversations.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2016.0.0-brightgreen)](https://nodejs.org)
+[![React Version](https://img.shields.io/badge/react-%5E18.0.0-blue)](https://reactjs.org)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-## Features
+> An AI-powered therapeutic chatbot providing mental health support through personalized conversations.
 
-- User authentication with Firebase
-- OTP verification via Twilio
-- Therapeutic chat sessions with OpenAI integration
-- Personalized user profiles
-- Conversation history tracking
-- Responsive design for mobile and desktop
-- SEO optimized for better discoverability
+![TheraBot Demo](docs/images/demo.gif)
 
-## Project Structure
+## 🌟 Features
 
-The project is divided into two main parts:
+- 🔒 Secure user authentication with Firebase
+- 📱 OTP verification via Twilio
+- 🤖 AI-powered therapeutic conversations using OpenAI
+- 👤 Personalized user profiles
+- 📝 Conversation history tracking
+- 🎨 Beautiful, responsive design
+- 🔐 Enterprise-grade security measures
 
-- **Client**: React frontend application
-- **Server**: Node.js/Express backend API
-
-### Tech Stack
-
-#### Frontend
-- React
-- React Router
-- Firebase Authentication
-- Axios for API calls
-
-#### Backend
-- Node.js
-- Express
-- Firebase Admin SDK
-- Twilio for OTP verification
-- OpenAI API for chat functionality
-- Google APIs
-
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js and npm installed
+
+- Node.js >= 16.0.0
+- npm >= 8.0.0
 - Firebase account
 - Twilio account
 - OpenAI API key
@@ -51,85 +37,133 @@ git clone https://github.com/yourusername/TheraBot.git
 cd TheraBot
 ```
 
-2. Install dependencies for the root project, client, and server
+2. Install dependencies
 ```bash
+# Install root dependencies
 npm install
+
+# Install client dependencies
 cd client && npm install
+
+# Install server dependencies
 cd ../server && npm install
 ```
 
-3. Set up environment variables:
-   - Create `.env` file in the server directory with:
-   ```
-   PORT=3001
-   OPENAI_API_KEY=your_openai_api_key
-   TWILIO_ACCOUNT_SID=your_twilio_sid
-   TWILIO_AUTH_TOKEN=your_twilio_auth_token
-   TWILIO_PHONE_NUMBER=your_twilio_phone_number
-   ```
-   
-   - Create `.env` file in the client directory with:
-   ```
-   REACT_APP_FIREBASE_API_KEY=your_firebase_api_key
-   REACT_APP_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
-   REACT_APP_FIREBASE_PROJECT_ID=your_firebase_project_id
-   REACT_APP_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
-   REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
-   REACT_APP_FIREBASE_APP_ID=your_firebase_app_id
-   REACT_APP_API_URL=http://localhost:3001
-   ```
+3. Set up environment variables
+```bash
+# Client
+cp client/.env.example client/.env
 
-4. Set up Firebase:
-   - Place your Firebase service account key JSON file in the server directory
-   - Update the path in the server's Firebase configuration
+# Server
+cp server/.env.example server/.env
+```
+
+4. Configure your environment variables with your API keys and credentials
 
 ### Running the Application
 
-1. Start the backend server
+1. Start the server
 ```bash
 cd server
-node server.js
+npm run dev
 ```
 
-2. Start the frontend client (in a new terminal)
+2. Start the client (in a new terminal)
 ```bash
 cd client
 npm start
 ```
 
-3. Access the application at http://localhost:3000
+3. Visit http://localhost:3000 in your browser
 
-## Usage
+## 🏗️ Architecture
 
-1. Create an account or log in using the provided authentication methods
-2. Complete your profile with relevant personal information
-3. Start a new chat session with TheraBot to receive therapeutic support
-4. Access your conversation history from the dashboard
-5. Update personal preferences in the settings page
+```
+TheraBot/
+├── client/                 # React frontend
+│   ├── public/            # Static files
+│   └── src/              
+│       ├── components/    # React components
+│       ├── contexts/      # React contexts
+│       ├── services/      # API services
+│       └── utils/         # Utility functions
+├── server/                # Node.js backend
+│   ├── controllers/      # Route controllers
+│   ├── middleware/       # Express middleware
+│   ├── routes/          # API routes
+│   └── services/        # Business logic
+└── docs/                 # Documentation
+```
 
-## SEO Optimization
+## 🔒 Security Features
 
-TheraBot includes several SEO optimizations:
+- CORS protection
+- Rate limiting
+- Input validation
+- XSS prevention
+- Session management
+- Request sanitization
+- Secure headers
+- Audit logging
 
-1. **Meta Tags**: Enhanced metadata in the HTML head for better search engine visibility
-2. **Open Graph Protocol**: Social media sharing optimizations for Facebook, Twitter, and other platforms
-3. **Structured Data**: Schema.org JSON-LD markup for search engine understanding
-4. **Sitemap**: XML sitemap for better search engine crawling
-5. **Robots.txt**: Proper configuration for search engine crawlers
-6. **Security.txt**: Standard file for security researchers
-7. **Web Manifest**: PWA support with proper metadata
-8. **Canonical URLs**: Prevention of duplicate content issues
+## 📚 API Documentation
 
-## License
+Detailed API documentation is available at [/docs/api.md](docs/api.md)
 
-[MIT](LICENSE)
+## 🧪 Testing
 
-## Contributing
+```bash
+# Run client tests
+cd client && npm test
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+# Run server tests
+cd server && npm test
+
+# Run e2e tests
+npm run test:e2e
+```
+
+## 📈 Performance
+
+- Optimized bundle size
+- Lazy loading components
+- Efficient caching
+- Response compression
+- Image optimization
+- PWA support
+
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request 
+5. Open a Pull Request
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and development process.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- OpenAI for their powerful API
+- Firebase for authentication
+- Twilio for OTP services
+- All our contributors and supporters
+
+## 📞 Support
+
+- Documentation: [/docs](docs/README.md)
+- Issues: [GitHub Issues](https://github.com/yourusername/TheraBot/issues)
+- Email: support@therabot.com
+- Discord: [Join our community](https://discord.gg/therabot)
+
+## 🔮 Roadmap
+
+See our [ROADMAP.md](ROADMAP.md) for planned features and improvements.
+
+---
+
+Made with ❤️ by [Your Name] 
