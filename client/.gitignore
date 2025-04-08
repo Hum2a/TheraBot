@@ -4,20 +4,129 @@
 /node_modules
 /.pnp
 .pnp.js
+package-lock.json
+yarn.lock
 
 # testing
 /coverage
+.nyc_output
+*.lcov
 
 # production
 /build
+/dist
+*.tgz
+
+# environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env*.local
+
+# Keep example env file
+!.env.example
 
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+*.pem
+.eslintcache
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+debug.log
+logs
+*.log
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+*.iml
+*.ipr
+*.iws
+*.sublime-workspace
+*.sublime-project
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*.swo
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn
+.yarn-integrity
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+.temp
+
+# System Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# React specific
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# PWA files
+**/public/workbox-*.js
+**/public/sw.js
+**/public/fallback-*.js
+
+# Storybook
+storybook-static/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Build folders
+out/
+.next/
+
+# Dependency directories
+jspm_packages/
+bower_components/
+
+# Optional: Uncomment if using TypeScript
+# next-env.d.ts
