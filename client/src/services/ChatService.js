@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { getAuth } from 'firebase/auth';
 
-const API_URL = 'https://2377-92-40-174-2.ngrok-free.app';
-// const API_URL = "https://therabot-9v4b.onrender.com";
+const API_URL = 'https://therabot-9v4b.onrender.com';
 // const API_URL = process.env.API_URL;
 // Use local server for development
 
