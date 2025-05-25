@@ -1,18 +1,37 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiMessageSquare } from 'react-icons/fi';
 import { auth } from '../../firebase/firebase';
 import styles from '../styles/Navbar.module.css';
 
 const Navbar = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsAuthenticated(!!user);
+      if (!user) {
+        navigate('/login');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      alert('You have been logged out.');
+      setIsAuthenticated(false);
+      navigate('/login');
     } catch (error) {
       console.error('Error logging out:', error);
     }
   };
+
+  if (!isAuthenticated) {
+    return null; // Don't show navbar when not authenticated
+  }
 
   return (
     <nav className={styles.navbar}>
