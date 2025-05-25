@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { sendMessageToChatbot, initializeSession } from '../../services/ChatService';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import styles from '../styles/ChatBot.module.css';
 
 const Chatbot = () => {
@@ -7,10 +8,23 @@ const Chatbot = () => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Initialize session when the component loads
+  // Check authentication state
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsAuthenticated(!!user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Initialize session when authenticated
   useEffect(() => {
     const createSession = async () => {
+      if (!isAuthenticated) return;
+      
       try {
         const newSessionId = await initializeSession();
         setSessionId(newSessionId);
@@ -19,10 +33,10 @@ const Chatbot = () => {
       }
     };
     createSession();
-  }, []);
+  }, [isAuthenticated]);
 
   const sendMessage = async () => {
-    if (!input.trim() || !sessionId) return;
+    if (!input.trim() || !sessionId || !isAuthenticated) return;
 
     const userMessage = { sender: 'user', text: input };
     setMessages((prev) => [...prev, userMessage]);
@@ -49,6 +63,21 @@ const Chatbot = () => {
     }
   };
 
+  if (!isAuthenticated) {
+    return (
+      <div className={styles.chatContainer}>
+        <div className={styles.chatHeader}>Welcome to TheraBot</div>
+        <div className={styles.messagesContainer}>
+          <div className={`${styles.message} ${styles.bot}`}>
+            <div className={styles.messageText}>
+              Please log in to start chatting with TheraBot.
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>Welcome to TheraBot</div>
@@ -69,7 +98,7 @@ const Chatbot = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown} // Listen for Enter key
+          onKeyDown={handleKeyDown}
           placeholder="Type your message here..."
           className={styles.inputField}
         />

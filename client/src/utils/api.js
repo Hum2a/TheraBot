@@ -3,7 +3,8 @@ import axiosRetry from 'axios-retry';
 import { tokenManager, checkSecurityHeaders, sanitizeUrl } from './security';
 
 const api = axios.create({
-  baseURL: sanitizeUrl(process.env.REACT_APP_API_URL || 'http://localhost:3001'),
+  // baseURL: sanitizeUrl(process.env.REACT_APP_API_URL || 'http://localhost:3001'),
+  baseURL: 'https://2377-92-40-174-2.ngrok-free.app',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

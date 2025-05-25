@@ -1,34 +1,39 @@
 const express = require('express');
-const { handleChat, initializeSession, fetchHistory } = require('../controllers/chatController');
+const { handleChat, initializeSession, fetchHistory, deleteSession } = require('../controllers/chatController');
 const { chatValidation } = require('../middleware/validation');
-const { chatLimiter, sanitizeInput, validateSession } = require('../middleware/security');
+const { chatLimiter, sanitizeInput } = require('../middleware/security');
 const { auditLogger } = require('../middleware/logging');
+const { verifyFirebaseToken } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Apply chat rate limiter, sanitization, and session validation to all chat routes
+// Apply chat rate limiter and sanitization to all chat routes
 router.use(chatLimiter);
 router.use(sanitizeInput);
-router.use(validateSession);
+
+// Apply Firebase authentication to all chat routes
+router.use(verifyFirebaseToken);
 
 // Initialize chat session
-router.post('/initialize-session', chatValidation.session, async (req, res, next) => {
+router.post('/initialize-session', async (req, res, next) => {
   try {
-    // Your existing session initialization logic here
-    auditLogger('CHAT_SESSION_INIT', req.session.userId, { sessionId: req.body.sessionId });
+    const sessionId = await initializeSession(req.user.uid);
+    auditLogger('CHAT_SESSION_INIT', req.user.uid, { sessionId });
+    res.json({ sessionId });
   } catch (error) {
     next(error);
   }
 });
 
 // Send message
-router.post('/webhook', chatValidation.message, async (req, res, next) => {
+router.post('/webhook', async (req, res, next) => {
   try {
-    // Your existing message handling logic here
-    auditLogger('CHAT_MESSAGE_SENT', req.session.userId, {
+    const response = await handleChat(req.body.Body, req.body.From, req.body.sessionId, req.user.uid);
+    auditLogger('CHAT_MESSAGE_SENT', req.user.uid, {
       sessionId: req.body.sessionId,
-      messageLength: req.body.message.length
+      messageLength: req.body.Body.length
     });
+    res.json(response);
   } catch (error) {
     next(error);
   }
@@ -37,10 +42,11 @@ router.post('/webhook', chatValidation.message, async (req, res, next) => {
 // Get chat history
 router.get('/history', async (req, res, next) => {
   try {
-    // Your existing history fetching logic here
-    auditLogger('CHAT_HISTORY_ACCESS', req.session.userId, {
+    const history = await fetchHistory(req.user.uid);
+    auditLogger('CHAT_HISTORY_ACCESS', req.user.uid, {
       sessionId: req.query.sessionId
     });
+    res.json(history);
   } catch (error) {
     next(error);
   }
@@ -49,10 +55,11 @@ router.get('/history', async (req, res, next) => {
 // Delete chat session
 router.delete('/session/:sessionId', async (req, res, next) => {
   try {
-    // Your existing session deletion logic here
-    auditLogger('CHAT_SESSION_DELETE', req.session.userId, {
+    await deleteSession(req.params.sessionId, req.user.uid);
+    auditLogger('CHAT_SESSION_DELETE', req.user.uid, {
       sessionId: req.params.sessionId
     });
+    res.json({ message: 'Session deleted successfully' });
   } catch (error) {
     next(error);
   }

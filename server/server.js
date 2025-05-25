@@ -34,6 +34,9 @@ const chatRoutes = require('./routes/chatRoutes');
 
 const app = express();
 
+// Trust proxy configuration for ngrok
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet());
 app.use(cookieParser());
@@ -52,7 +55,8 @@ app.use(session({
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : 'http://localhost:3000',
+  // origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://2377-92-40-174-2.ngrok-free.app'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -62,10 +66,13 @@ app.use(cors({
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// Rate limiting
+// Rate limiting with proxy support
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  trustProxy: true // Trust the X-Forwarded-For header
 });
 
 // Apply rate limiting to all routes
@@ -74,7 +81,10 @@ app.use(limiter);
 // Stricter rate limits for auth routes
 const authLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5 // limit each IP to 5 login requests per hour
+  max: 5, // limit each IP to 5 login requests per hour
+  standardHeaders: true,
+  legacyHeaders: false,
+  trustProxy: true
 });
 
 // Input sanitization middleware
