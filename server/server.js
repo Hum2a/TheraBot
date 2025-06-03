@@ -55,10 +55,9 @@ app.use(session({
 
 // CORS configuration
 app.use(cors({
-  // origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : 'http://localhost:3000',
-  origin: ['http://localhost:3000', 'https://2377-92-40-174-2.ngrok-free.app'],
+  origin: ['http://localhost:3000', 'https://therabot-site.onrender.com'],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 

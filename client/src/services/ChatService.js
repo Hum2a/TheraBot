@@ -27,7 +27,8 @@ export const initializeSession = async () => {
         headers: { 
           Authorization: `Bearer ${idToken}`,
           'Content-Type': 'application/json'
-        } 
+        },
+        withCredentials: true
       }
     );
     console.log('Session initialized successfully:', response.data);
@@ -54,7 +55,8 @@ export const sendMessageToChatbot = async (userMessage, sessionId) => {
         headers: { 
           Authorization: `Bearer ${idToken}`,
           'Content-Type': 'application/json'
-        } 
+        },
+        withCredentials: true
       }
     );
     return response.data;
@@ -72,7 +74,8 @@ export const fetchConversationHistory = async (user) => {
       headers: { 
         Authorization: `Bearer ${idToken}`,
         'Content-Type': 'application/json'
-      }
+      },
+      withCredentials: true
     });
 
     return response.data;
