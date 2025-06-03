@@ -9,6 +9,7 @@ import ChatPage from '../components/pages/ChatPage';
 import ProfilePage from '../components/pages/ProfilePage';
 import ConversationHistory from '../components/pages/ConversationHistory';
 import SettingsPage from '../components/pages/SettingsPage';
+import NotFoundPage from '../components/pages/NotFoundPage';
 
 const Navigation = () => {
   return (
@@ -25,7 +26,7 @@ const Navigation = () => {
 
         {/* Default Routes */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );

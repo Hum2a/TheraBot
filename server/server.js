@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const { body, validationResult } = require('express-validator');
 const sanitizeHtml = require('sanitize-html');
 const winston = require('winston');
+const path = require('path');
 require('dotenv').config();
 
 // Configure Winston logger
@@ -127,9 +128,12 @@ app.use('/auth', authLimiter, authRoutes);
 app.use('/otp', authLimiter, otpRoutes);
 app.use('/chat', chatRoutes);
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Not Found' });
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
 
 // Global error handler
