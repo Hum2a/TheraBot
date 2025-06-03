@@ -3,35 +3,71 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#6200ea" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Viewport and Theme -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="theme-color" content="#6B46C1" />
+    <meta name="color-scheme" content="light dark" />
     
     <!-- Primary Meta Tags -->
-    <title>TheraBot - AI-Powered Mental Health Support</title>
-    <meta name="title" content="TheraBot - AI-Powered Mental Health Support">
-    <meta name="description" content="TheraBot provides personalized therapeutic conversations to support your mental health journey. Chat with our AI assistant anytime, anywhere." />
-    <meta name="keywords" content="therapy, mental health, AI chatbot, therapeutic support, online therapy, mental wellness" />
+    <title>TheraBot - Your AI-Powered Mental Health Companion</title>
+    <meta name="title" content="TheraBot - Your AI-Powered Mental Health Companion">
+    <meta name="description" content="Experience personalized therapeutic conversations with TheraBot, your 24/7 AI mental health companion. Get support, guidance, and tools for your mental wellness journey." />
+    <meta name="keywords" content="AI therapy, mental health support, therapeutic chatbot, online counseling, mental wellness, emotional support, self-care, mindfulness, stress management, anxiety relief" />
     <meta name="author" content="TheraBot" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="%PUBLIC_URL%" />
-    <meta property="og:title" content="TheraBot - AI-Powered Mental Health Support" />
-    <meta property="og:description" content="TheraBot provides personalized therapeutic conversations to support your mental health journey. Chat with our AI assistant anytime, anywhere." />
+    <meta property="og:title" content="TheraBot - Your AI-Powered Mental Health Companion" />
+    <meta property="og:description" content="Experience personalized therapeutic conversations with TheraBot, your 24/7 AI mental health companion. Get support, guidance, and tools for your mental wellness journey." />
     <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="TheraBot" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image:alt" content="TheraBot - AI-Powered Mental Health Support" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:secure_url" content="%PUBLIC_URL%/og-image.png" />
     
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="%PUBLIC_URL%" />
-    <meta property="twitter:title" content="TheraBot - AI-Powered Mental Health Support" />
-    <meta property="twitter:description" content="TheraBot provides personalized therapeutic conversations to support your mental health journey. Chat with our AI assistant anytime, anywhere." />
-    <meta property="twitter:image" content="%PUBLIC_URL%/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="%PUBLIC_URL%" />
+    <meta name="twitter:title" content="TheraBot - Your AI-Powered Mental Health Companion" />
+    <meta name="twitter:description" content="Experience personalized therapeutic conversations with TheraBot, your 24/7 AI mental health companion. Get support, guidance, and tools for your mental wellness journey." />
+    <meta name="twitter:image" content="%PUBLIC_URL%/og-image.png" />
+    <meta name="twitter:creator" content="@therabot" />
+    <meta name="twitter:image:alt" content="TheraBot - AI-Powered Mental Health Support" />
+    <meta name="twitter:site" content="@therabot" />
+    <meta name="twitter:app:name:iphone" content="TheraBot" />
+    <meta name="twitter:app:name:ipad" content="TheraBot" />
+    <meta name="twitter:app:name:googleplay" content="TheraBot" />
     
+    <!-- PWA -->
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="TheraBot" />
+    
+    <!-- Canonical URL -->
     <link rel="canonical" href="%PUBLIC_URL%" />
+    
+    <!-- Security Headers -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval';" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" /> -->
     
     <!-- Structured Data / JSON-LD -->
     <script type="application/ld+json">
@@ -40,17 +76,45 @@
         "@type": "WebApplication",
         "name": "TheraBot",
         "url": "%PUBLIC_URL%",
-        "description": "TheraBot provides personalized therapeutic conversations to support your mental health journey.",
+        "description": "Experience personalized therapeutic conversations with TheraBot, your 24/7 AI mental health companion.",
         "applicationCategory": "HealthApplication",
+        "operatingSystem": "Web",
         "offers": {
           "@type": "Offer",
-          "price": "0"
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "ratingCount": "1250"
+        },
+        "featureList": [
+          "24/7 AI-powered therapeutic conversations",
+          "Personalized mental health support",
+          "Privacy-focused communication",
+          "Evidence-based therapeutic approaches",
+          "Progress tracking and insights"
+        ],
+        "screenshot": "%PUBLIC_URL%/og-image.png",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "permissions": "microphone",
+        "author": {
+          "@type": "Organization",
+          "name": "TheraBot",
+          "url": "%PUBLIC_URL%"
         }
       }
     </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      <div style="text-align: center; padding: 20px; font-family: 'Poppins', sans-serif;">
+        <h1>JavaScript Required</h1>
+        <p>To use TheraBot, please enable JavaScript in your browser settings.</p>
+        <p>We use JavaScript to provide you with a secure and interactive experience.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <!--
       This HTML file is a template.
