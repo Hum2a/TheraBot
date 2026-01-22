@@ -9,6 +9,8 @@ const Chatbot = () => {
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [connectionError, setConnectionError] = useState(null);
 
   // Check authentication state
   useEffect(() => {
@@ -23,13 +25,25 @@ const Chatbot = () => {
   // Initialize session when authenticated
   useEffect(() => {
     const createSession = async () => {
-      if (!isAuthenticated) return;
+      if (!isAuthenticated) {
+        setSessionId(null);
+        setConnectionError(null);
+        return;
+      }
+      
+      setIsConnecting(true);
+      setConnectionError(null);
       
       try {
         const newSessionId = await initializeSession();
         setSessionId(newSessionId);
+        setConnectionError(null);
       } catch (error) {
         console.error('Failed to initialize session:', error);
+        setConnectionError(error.message || 'Failed to connect to chatbot');
+        setSessionId(null);
+      } finally {
+        setIsConnecting(false);
       }
     };
     createSession();
@@ -83,6 +97,29 @@ const Chatbot = () => {
       <div className={styles.chatHeader}>Welcome to TheraBot</div>
 
       <div className={styles.messagesContainer}>
+        {!sessionId && isConnecting && (
+          <div className={`${styles.message} ${styles.bot}`}>
+            <div className={styles.messageText}>
+              Connecting to TheraBot...
+            </div>
+          </div>
+        )}
+        {!sessionId && !isConnecting && connectionError && (
+          <div className={`${styles.message} ${styles.bot}`}>
+            <div className={styles.messageText} style={{ color: '#d32f2f' }}>
+              <strong>Connection Error:</strong> {connectionError}
+              <br />
+              <small>Visit the Developer page to diagnose the issue.</small>
+            </div>
+          </div>
+        )}
+        {sessionId && messages.length === 0 && (
+          <div className={`${styles.message} ${styles.bot}`}>
+            <div className={styles.messageText}>
+              Connected! You can start chatting with TheraBot.
+            </div>
+          </div>
+        )}
         {messages.map((msg, index) => (
           <div key={index} className={`${styles.message} ${styles[msg.sender]}`}>
             <div className={styles.messageText}>
@@ -102,7 +139,12 @@ const Chatbot = () => {
           placeholder="Type your message here..."
           className={styles.inputField}
         />
-        <button onClick={sendMessage} className={styles.sendButton} disabled={!input.trim()}>
+        <button 
+          onClick={sendMessage} 
+          className={styles.sendButton} 
+          disabled={!input.trim() || !sessionId || isConnecting}
+          title={!sessionId ? 'Not connected to chatbot' : ''}
+        >
           Send
         </button>
       </div>

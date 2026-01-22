@@ -9,6 +9,7 @@ import ChatPage from '../components/pages/ChatPage';
 import ProfilePage from '../components/pages/ProfilePage';
 import ConversationHistory from '../components/pages/ConversationHistory';
 import SettingsPage from '../components/pages/SettingsPage';
+import DeveloperPage from '../components/pages/DeveloperPage';
 import NotFoundPage from '../components/pages/NotFoundPage';
 
 const Navigation = () => {
@@ -23,6 +24,7 @@ const Navigation = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/history" element={<ConversationHistory />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/developer" element={<DeveloperPage />} />
 
         {/* Default Routes */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />

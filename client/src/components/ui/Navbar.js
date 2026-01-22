@@ -50,6 +50,7 @@ const Navbar = () => {
         <Link to="/profile" className={styles.link}>Profile</Link>
         <Link to="/history" className={styles.link}>Conversation History</Link>
         <Link to="/settings" className={styles.link}>Settings</Link>
+        <Link to="/developer" className={styles.link}>Developer</Link>
         <button onClick={handleLogout} className={styles.logoutButton}>Logout</button>
       </div>
     </nav>
