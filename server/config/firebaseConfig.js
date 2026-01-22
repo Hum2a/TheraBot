@@ -10,6 +10,7 @@ if (admin.apps.length > 0) {
   console.log('Firebase Admin SDK already initialized');
   // Get existing Firestore instance without calling settings() again
   db = admin.firestore();
+  console.log('Using existing Firestore instance');
 } else {
   try {
     // Method 1: Try environment variables first (preferred for new setups)
@@ -55,8 +56,19 @@ if (admin.apps.length > 0) {
     }
 
     // Initialize Firestore - settings() must be called BEFORE any other Firestore operations
+    // But only if Firestore hasn't been initialized yet
     db = admin.firestore();
-    db.settings({ ignoreUndefinedProperties: true });
+    try {
+      db.settings({ ignoreUndefinedProperties: true });
+      console.log('Firestore settings configured successfully');
+    } catch (settingsError) {
+      // If settings() has already been called, that's okay - just use the existing instance
+      if (settingsError.message && settingsError.message.includes('already been initialized')) {
+        console.log('Firestore already initialized, using existing instance');
+      } else {
+        throw settingsError;
+      }
+    }
     console.log('Firestore initialized successfully');
   } catch (error) {
     console.error('Error initializing Firebase Admin SDK:', error);
