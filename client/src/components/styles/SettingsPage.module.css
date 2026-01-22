@@ -96,6 +96,10 @@
     border-color: #805AD5;
 }
 
+.select::placeholder, .input::placeholder {
+    color: #718096;
+}
+
 input[type="checkbox"] {
     width: 1.2rem;
     height: 1.2rem;

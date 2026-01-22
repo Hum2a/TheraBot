@@ -61,6 +61,7 @@
     border-radius: 12px;
     font-size: 1rem;
     background: #f8f9fa;
+    color: #2D3748;
     transition: all 0.3s ease;
     animation: slideUp 0.5s ease-out;
   }
@@ -70,6 +71,11 @@
     background: white;
     box-shadow: 0 0 0 4px rgba(107, 70, 193, 0.1);
     outline: none;
+    color: #2D3748;
+  }
+
+  .inputField::placeholder {
+    color: #718096;
   }
   
   .authButton {
