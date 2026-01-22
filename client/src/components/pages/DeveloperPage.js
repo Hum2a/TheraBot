@@ -130,27 +130,41 @@ const DeveloperPage = () => {
 
       const idToken = await user.getIdToken();
       
-      // Try to reach the API endpoint
-      const response = await axios.get(`${API_URL}/health`, {
+      // Try to reach the API server - test with root endpoint or a simple check
+      // We'll accept any response status as long as we get a response (means server is up)
+      const startTime = Date.now();
+      const response = await axios.get(`${API_URL}/`, {
         headers: {
           Authorization: `Bearer ${idToken}`,
           'Content-Type': 'application/json'
         },
-        timeout: 5000,
-        validateStatus: () => true // Accept any status code
+        timeout: 10000,
+        validateStatus: () => true // Accept any status code to check if server responds
       });
+      const responseTime = Date.now() - startTime;
 
-      if (response.status === 200 || response.status === 404) {
-        // 404 is okay, it means the server is reachable
+      // Any response (even 404) means the server is reachable and responding
+      if (response.status >= 200 && response.status < 600) {
+        let message = 'API server is reachable and responding';
+        if (response.status === 404) {
+          message = 'API server is reachable (404 indicates server is up, endpoint may not exist)';
+        } else if (response.status === 200) {
+          message = 'API server is reachable and healthy';
+        } else {
+          message = `API server is reachable (Status: ${response.status})`;
+        }
+
         setTestResults(prev => ({
           ...prev,
           apiConnection: {
             status: 'success',
-            message: `API server is reachable (Status: ${response.status})`,
+            message: message,
             details: {
               url: API_URL,
               status: response.status,
-              responseTime: response.headers['x-response-time'] || 'N/A'
+              statusText: response.statusText,
+              responseTime: `${responseTime}ms`,
+              serverReachable: true
             }
           }
         }));
@@ -162,16 +176,37 @@ const DeveloperPage = () => {
       let errorDetails = {};
 
       if (error.code === 'ECONNABORTED') {
-        errorMessage = 'API connection timeout';
-        errorDetails = { timeout: 'Request took longer than 5 seconds' };
-      } else if (error.code === 'ERR_NETWORK') {
-        errorMessage = 'Network error - API server may be down';
-        errorDetails = { networkError: error.message };
+        errorMessage = 'API connection timeout - server may be down or slow';
+        errorDetails = { 
+          timeout: 'Request took longer than 10 seconds',
+          url: API_URL,
+          serverReachable: false
+        };
+      } else if (error.code === 'ERR_NETWORK' || error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
+        errorMessage = 'Network error - API server may be down or unreachable';
+        errorDetails = { 
+          networkError: error.message,
+          code: error.code,
+          url: API_URL,
+          serverReachable: false
+        };
       } else if (error.response) {
-        errorMessage = `API returned error: ${error.response.status}`;
-        errorDetails = { status: error.response.status, data: error.response.data };
+        // If we got a response, server is reachable
+        errorMessage = `API server responded with status ${error.response.status}`;
+        errorDetails = { 
+          status: error.response.status,
+          statusText: error.response.statusText,
+          url: API_URL,
+          serverReachable: true,
+          data: error.response.data
+        };
       } else {
-        errorDetails = { error: error.message };
+        errorDetails = { 
+          error: error.message,
+          code: error.code,
+          url: API_URL,
+          serverReachable: false
+        };
       }
 
       setTestResults(prev => ({
