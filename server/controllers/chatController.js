@@ -190,35 +190,59 @@ async function handleChat(Body, From, sessionId, userId) {
   }
 }
 
-async function fetchHistory(req, res) {
-    try {
-      const idToken = req.headers.authorization?.split('Bearer ')[1];
-      if (!idToken) {
-        return res.status(401).send('Unauthorized');
-      }
-  
-      const decodedToken = await admin.auth().verifyIdToken(idToken);
-      const userId = decodedToken.uid;
-  
-      // Fetch conversations for the user
-      const conversationsRef = db
-        .collection('users')
-        .doc(userId)
-        .collection('conversations');
-  
-      const snapshot = await conversationsRef.get();
-  
-      const conversations = [];
-      snapshot.forEach((doc) => {
-        conversations.push({ id: doc.id, ...doc.data() });
-      });
-  
-      res.status(200).json(conversations);
-    } catch (error) {
-      console.error('Error fetching conversation history:', error);
-      res.status(500).send('Error fetching conversation history');
-    }
+/**
+ * Fetch conversation history for a user.
+ * Returns all conversations for the given userId.
+ */
+async function fetchHistory(userId) {
+  try {
+    // Fetch conversations for the user
+    const conversationsRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('conversations');
+
+    const snapshot = await conversationsRef.get();
+
+    const conversations = [];
+    snapshot.forEach((doc) => {
+      conversations.push({ id: doc.id, ...doc.data() });
+    });
+
+    return conversations;
+  } catch (error) {
+    console.error('Error fetching conversation history:', error);
+    throw error;
   }
-  
-module.exports = { initializeSession, handleChat, fetchHistory };
+}
+
+/**
+ * Delete a conversation session.
+ * Verifies the session belongs to the user before deleting.
+ */
+async function deleteSession(sessionId, userId) {
+  try {
+    const conversationRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('conversations')
+      .doc(sessionId);
+
+    // Verify the session exists and belongs to the user
+    const sessionDoc = await conversationRef.get();
+    if (!sessionDoc.exists) {
+      throw new Error('Session not found');
+    }
+
+    // Delete the session
+    await conversationRef.delete();
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting session:', error);
+    throw error;
+  }
+}
+
+module.exports = { initializeSession, handleChat, fetchHistory, deleteSession };
   
