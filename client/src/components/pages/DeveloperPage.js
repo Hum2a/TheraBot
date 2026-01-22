@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeSession, sendMessageToChatbot } from '../../services/ChatService';
 import axios from 'axios';
@@ -6,7 +7,16 @@ import styles from '../styles/DeveloperPage.module.css';
 
 const API_URL = 'https://therabot-9v4b.onrender.com';
 
+// Check if running on localhost
+const isLocalhost = () => {
+  const hostname = window.location.hostname;
+  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
+};
+
 const DeveloperPage = () => {
+  const navigate = useNavigate();
+  
+  // All hooks must be called before any conditional returns
   const [testResults, setTestResults] = useState({
     authentication: { status: 'pending', message: 'Not tested', details: null },
     idToken: { status: 'pending', message: 'Not tested', details: null },
@@ -18,6 +28,13 @@ const DeveloperPage = () => {
   const [sessionId, setSessionId] = useState(null);
   const [testMessage, setTestMessage] = useState('Hello, this is a test message');
   const [isRunningAll, setIsRunningAll] = useState(false);
+
+  // Redirect if not on localhost
+  useEffect(() => {
+    if (!isLocalhost()) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   // Monitor authentication state
   useEffect(() => {
@@ -407,6 +424,11 @@ const DeveloperPage = () => {
       return null;
     }
   };
+
+  // Don't render if not on localhost (after all hooks are called)
+  if (!isLocalhost()) {
+    return null;
+  }
 
   return (
     <div className={styles.page}>
