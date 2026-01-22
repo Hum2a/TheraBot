@@ -158,32 +158,68 @@ async function handleChat(Body, From, sessionId, userId) {
     
     Remember: Your role is to guide users toward their own insights and growth, not to provide direct solutions or medical advice.`;
 
-    const openAIResponse = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        {
-          role: 'system',
-          content: systemPrompt,
-        },
-        {
-          role: 'user',
-          content: Body,
-        },
-      ],
-    });
+    try {
+      const openAIResponse = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: [
+          {
+            role: 'system',
+            content: systemPrompt,
+          },
+          {
+            role: 'user',
+            content: Body,
+          },
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+        timeout: 30000, // 30 second timeout
+      });
 
-    const botReply = openAIResponse.choices[0].message.content;
+      // Validate response
+      if (!openAIResponse || !openAIResponse.choices || !openAIResponse.choices[0] || !openAIResponse.choices[0].message) {
+        throw new Error('Invalid response structure from OpenAI API');
+      }
 
-    // Append the new message to the session document in Firestore
-    await conversationRef.update({
-      messages: admin.firestore.FieldValue.arrayUnion({
-        userMessage: Body,
-        botMessage: botReply,
-        timestamp: new Date(),
-      }),
-    });
+      const botReply = openAIResponse.choices[0].message.content;
 
-    return { reply: botReply };
+      if (!botReply || botReply.trim().length === 0) {
+        throw new Error('Empty response from OpenAI API');
+      }
+
+      // Append the new message to the session document in Firestore
+      await conversationRef.update({
+        messages: admin.firestore.FieldValue.arrayUnion({
+          userMessage: Body,
+          botMessage: botReply,
+          timestamp: new Date(),
+        }),
+      });
+
+      return { reply: botReply };
+    } catch (openAIError) {
+      console.error('OpenAI API Error:', {
+        message: openAIError.message,
+        status: openAIError.status,
+        code: openAIError.code,
+        type: openAIError.type
+      });
+
+      // Handle specific OpenAI API errors
+      if (openAIError.status === 429) {
+        return { error: 'The service is currently busy. Please try again in a moment.' };
+      } else if (openAIError.status === 401) {
+        console.error('OpenAI API key is invalid or missing');
+        return { error: 'Service configuration error. Please contact support.' };
+      } else if (openAIError.status === 500 || openAIError.status === 503) {
+        return { error: 'The AI service is temporarily unavailable. Please try again later.' };
+      } else if (openAIError.code === 'ETIMEDOUT' || openAIError.code === 'ECONNABORTED') {
+        return { error: 'Request timed out. Please try again.' };
+      } else {
+        // For other errors, return a generic message
+        return { error: 'I encountered an error processing your message. Please try again.' };
+      }
+    }
   } catch (error) {
     console.error('Error handling chat:', error);
     return { error: 'Error processing your message.' };

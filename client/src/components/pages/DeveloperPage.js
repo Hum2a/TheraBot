@@ -128,31 +128,20 @@ const DeveloperPage = () => {
         throw new Error('No authenticated user');
       }
 
-      const idToken = await user.getIdToken();
-      
-      // Try to reach the API server - test with root endpoint or a simple check
-      // We'll accept any response status as long as we get a response (means server is up)
+      // Try to reach the API server using the health endpoint (no auth required)
       const startTime = Date.now();
-      const response = await axios.get(`${API_URL}/`, {
+      const response = await axios.get(`${API_URL}/health`, {
         headers: {
-          Authorization: `Bearer ${idToken}`,
           'Content-Type': 'application/json'
         },
         timeout: 10000,
-        validateStatus: () => true // Accept any status code to check if server responds
+        validateStatus: (status) => status < 500 // Accept 2xx, 3xx, 4xx but not 5xx
       });
       const responseTime = Date.now() - startTime;
 
-      // Any response (even 404) means the server is reachable and responding
-      if (response.status >= 200 && response.status < 600) {
-        let message = 'API server is reachable and responding';
-        if (response.status === 404) {
-          message = 'API server is reachable (404 indicates server is up, endpoint may not exist)';
-        } else if (response.status === 200) {
-          message = 'API server is reachable and healthy';
-        } else {
-          message = `API server is reachable (Status: ${response.status})`;
-        }
+      // Health endpoint should return 200 with status info
+      if (response.status === 200) {
+        const message = 'API server is reachable and healthy';
 
         setTestResults(prev => ({
           ...prev,
@@ -164,7 +153,24 @@ const DeveloperPage = () => {
               status: response.status,
               statusText: response.statusText,
               responseTime: `${responseTime}ms`,
-              serverReachable: true
+              serverReachable: true,
+              healthData: response.data
+            }
+          }
+        }));
+      } else if (response.status === 404) {
+        // Health endpoint doesn't exist (old server version)
+        setTestResults(prev => ({
+          ...prev,
+          apiConnection: {
+            status: 'success',
+            message: 'API server is reachable (health endpoint not available, but server is responding)',
+            details: {
+              url: API_URL,
+              status: response.status,
+              responseTime: `${responseTime}ms`,
+              serverReachable: true,
+              note: 'Server is up but health endpoint may not be implemented'
             }
           }
         }));

@@ -23,7 +23,7 @@
     "google-libphonenumber": "^3.2.40",
     "googleapis": "^144.0.0",
     "helmet": "^8.1.0",
-    "openai": "^4.76.3",
+    "openai": "^6.15.0",
     "sanitize-html": "^2.15.0",
     "twilio": "^5.4.0",
     "winston": "^3.17.0"
