@@ -207,9 +207,26 @@ async function handleChat(Body, From, sessionId, userId) {
 
       // Handle specific OpenAI API errors
       if (openAIError.status === 429) {
-        return { error: 'The service is currently busy. Please try again in a moment.' };
+        // Check if it's a quota issue vs rate limit
+        if (openAIError.code === 'insufficient_quota' || openAIError.type === 'insufficient_quota') {
+          console.error('⚠️  OpenAI Quota Exceeded - This usually means:');
+          console.error('   1. No payment method added to your OpenAI account');
+          console.error('   2. Free tier credits exhausted');
+          console.error('   3. API key belongs to a different project than shown in dashboard');
+          console.error('   4. Billing limit reached');
+          console.error('   Check: https://platform.openai.com/account/billing');
+          return { 
+            error: 'OpenAI quota exceeded. Please check your billing settings at https://platform.openai.com/account/billing. You may need to add a payment method or the API key may belong to a different project.',
+            code: 'insufficient_quota',
+            helpUrl: 'https://platform.openai.com/account/billing'
+          };
+        } else {
+          // Rate limit (too many requests)
+          return { error: 'The service is currently busy. Please try again in a moment.' };
+        }
       } else if (openAIError.status === 401) {
         console.error('OpenAI API key is invalid or missing');
+        console.error('Verify your OPENAI_API_KEY environment variable is set correctly');
         return { error: 'Service configuration error. Please contact support.' };
       } else if (openAIError.status === 500 || openAIError.status === 503) {
         return { error: 'The AI service is temporarily unavailable. Please try again later.' };

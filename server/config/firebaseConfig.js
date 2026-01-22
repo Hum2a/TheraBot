@@ -36,7 +36,29 @@ if (admin.apps.length > 0) {
     }
     // Method 2: Try service account file (fallback)
     else {
-      const serviceAccountPath = path.join(__dirname, '..', 'therabot-fb6b3-firebase-adminsdk-tymrm-5be11a5729.json');
+      // Try new service account file first, then fallback to old one
+      const newServiceAccountPath = path.join(__dirname, '..', 'therabot-7a708-firebase-adminsdk-fbsvc-2c710cf603.json');
+      const oldServiceAccountPath = path.join(__dirname, '..', 'therabot-fb6b3-firebase-adminsdk-tymrm-5be11a5729.json');
+      
+      let serviceAccountPath = null;
+      try {
+        require.resolve(newServiceAccountPath);
+        serviceAccountPath = newServiceAccountPath;
+        console.log('Found new service account file, attempting to load from:', serviceAccountPath);
+      } catch (e) {
+        try {
+          require.resolve(oldServiceAccountPath);
+          serviceAccountPath = oldServiceAccountPath;
+          console.log('Found old service account file, attempting to load from:', serviceAccountPath);
+        } catch (e2) {
+          console.log('No service account file found');
+        }
+      }
+      
+      if (!serviceAccountPath) {
+        throw new Error('No service account file found');
+      }
+      
       console.log('Attempting to load service account from:', serviceAccountPath);
       
       try {
