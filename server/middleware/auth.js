@@ -39,7 +39,28 @@ const verifyFirebaseToken = async (req, res, next) => {
       console.error('Error code:', verifyError.code);
       console.error('Error message:', verifyError.message);
       console.error('Error stack:', verifyError.stack);
-      return res.status(401).json({ error: 'Invalid token' });
+      
+      // Provide more specific error messages
+      let errorMessage = 'Invalid token';
+      if (verifyError.code === 'auth/argument-error') {
+        errorMessage = 'Token format is invalid';
+      } else if (verifyError.code === 'auth/id-token-expired') {
+        errorMessage = 'Token has expired';
+      } else if (verifyError.code === 'auth/id-token-revoked') {
+        errorMessage = 'Token has been revoked';
+      } else if (verifyError.code === 'auth/invalid-id-token') {
+        errorMessage = 'Token is invalid or malformed';
+      } else if (verifyError.code === 'auth/project-not-found') {
+        errorMessage = 'Firebase project not found - check configuration';
+      } else if (verifyError.message) {
+        errorMessage = `Token verification failed: ${verifyError.message}`;
+      }
+      
+      return res.status(401).json({ 
+        error: errorMessage,
+        code: verifyError.code || 'unknown',
+        details: process.env.NODE_ENV === 'development' ? verifyError.message : undefined
+      });
     }
   } catch (error) {
     console.error('Error in auth middleware:', error);
